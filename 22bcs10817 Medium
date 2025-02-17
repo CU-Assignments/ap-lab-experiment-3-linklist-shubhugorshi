@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+// Definition for a singly linked list node
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// Function to delete the middle node of the linked list
+void deleteMiddle(ListNode* head) {
+    if (!head || !head->next) {
+        // If there's only one node or the list is empty, return
+        delete head;  // Delete the only node (if it exists)
+        head = nullptr; // Set head to null
+        return;
+    }
+
+    ListNode *slow = head, *fast = head;
+    ListNode *prev = nullptr;
+
+    // Move fast pointer by 2 steps and slow pointer by 1 step
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        prev = slow;
+        slow = slow->next;
+    }
+
+    // Now, slow pointer is at the middle node. Delete it.
+    prev->next = slow->next; // Skip the middle node
+
+    delete slow; // Delete the middle node
+}
+
+// Function to print the linked list
+void printList(ListNode* head) {
+    ListNode* current = head;
+    while (current != nullptr) {
+        cout << current->val << " ";
+        current = current->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    // Create a linked list: 1 -> 2 -> 3 -> 4 -> 5
+    ListNode* head = new ListNode(1);
+    head->next = new ListNode(2);
+    head->next->next = new ListNode(3);
+    head->next->next->next = new ListNode(4);
+    head->next->next->next->next = new ListNode(5);
+
+    cout << "Original Linked List: ";
+    printList(head);
+
+    // Delete the middle node
+    deleteMiddle(head);
+
+    cout << "Linked List after deleting the middle node: ";
+    printList(head);
+
+    // Clean up memory
+    ListNode* current = head;
+    while (current != nullptr) {
+        ListNode* nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+
+    return 0;
+}

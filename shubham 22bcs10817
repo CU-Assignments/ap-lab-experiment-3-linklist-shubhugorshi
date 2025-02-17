@@ -1,0 +1,68 @@
+class Node:
+    def __init__(self, data):
+        self.data = data  # Data to store
+        self.next = None  # Pointer to next node in list
+
+class LinkedList:
+    def __init__(self):
+        self.head = None  # Start of the linked list
+
+    # Insert a node at the end
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:  # If list is empty
+            self.head = new_node
+        else:
+            last_node = self.head
+            while last_node.next:  # Traverse to the end
+                last_node = last_node.next
+            last_node.next = new_node  # Append the new node
+
+    # Insert a node at the beginning
+    def prepend(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node  # Set the new node as the head
+
+    # Delete a node with specific value
+    def delete(self, key):
+        current = self.head
+        if current and current.data == key:  # If the head node itself is to be deleted
+            self.head = current.next
+            current = None
+            return
+
+        prev = None
+        while current and current.data != key:  # Search for the node to delete
+            prev = current
+            current = current.next
+
+        if current is None:  # If the key was not found
+            return
+
+        prev.next = current.next  # Unlink the node
+        current = None  # Free memory
+
+    # Display the list
+    def display(self):
+        current = self.head
+        while current:
+            print(current.data, end=" -> ")
+            current = current.next
+        print("None")
+
+# Example usage
+if __name__ == "__main__":
+    linked_list = LinkedList()
+    linked_list.append(10)
+    linked_list.append(20)
+    linked_list.append(30)
+    linked_list.prepend(5)
+    
+    print("Linked List:")
+    linked_list.display()
+
+    # Delete node with value 20
+    linked_list.delete(20)
+    print("After deleting 20:")
+    linked_list.display()
